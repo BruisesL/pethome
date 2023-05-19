@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="eth.bruises.org.mapper.DepartmentMapper">
+    <select id="selectAll" resultType="department">
+        select *
+        from t_department
+    </select>
+
+    <select id="selectOne" resultType="department">
+        select *
+        from t_department
+        where id = #{id}
+    </select>
+
+    <insert id="add">
+        insert into t_department (sn, name, dirpath, state, manager_id, parent_id)
+        values (#{sn}, #{name}, #{dirPath}, #{state}, #{managerId}, #{parentId})
+    </insert>
+
+    <update id="update">
+        update t_department
+        set sn=#{sn},
+            name=#{name},
+            dirpath=#{dirPath},
+            state=#{state},
+            manager_id=#{managerId},
+            parent_id=#{parentId}
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+        delete
+        from t_department
+        where id = #{id}
+    </delete>
+
+    <delete id="batchDel">
+        delete from t_department where id in
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="queryByCount" resultType="Integer">
+        select count(1)
+        from t_department td
+        <include refid="searchByCondition"></include>
+    </select>
+
+    <select id="queryByPage" resultType="department">
+        select td.*
+        from t_department td
+        <include refid="searchByCondition"></include>
+        order by td.id
+        limit #{begin},#{pageSize}
+    </select>
+
+    <sql id="searchByCondition">
+        <where>
+            <if test="null != name and !''.equals(name.trim())">
+                td.sn like concat('%',#{name},'%')
+                or td.name like concat('%',#{name},'%')
+            </if>
+        </where>
+    </sql>
+</mapper>
