@@ -57,13 +57,13 @@ public class BaseServiceImpl<T> implements BaseService<T> {
 
     @Override
     public PageInfo<T> page(BaseQuery query) {
-        Integer totals = baseMapper.queryByCount(query);
+        Integer total = baseMapper.queryByCount(query);
         // 如果查询条数为0，就不继续查询，直接返回结果
-        if (totals == 0) {
+        if (total == 0) {
             return new PageInfo<>(0, new ArrayList<>());
         }
 
         List<T> data = baseMapper.queryByPage(query);
-        return new PageInfo<>(totals, data);
+        return new PageInfo<>(total, data);
     }
 }

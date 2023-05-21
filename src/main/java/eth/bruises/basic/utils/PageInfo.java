@@ -18,7 +18,7 @@ public class PageInfo<T> {
     /**
      * 查询总条数
      */
-    private Integer totals;
+    private Integer total;
 
     /**
      * 查询数据

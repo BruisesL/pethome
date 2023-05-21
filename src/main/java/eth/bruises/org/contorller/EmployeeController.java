@@ -2,9 +2,9 @@ package eth.bruises.org.contorller;
 
 import eth.bruises.basic.utils.AjaxResult;
 import eth.bruises.basic.utils.PageInfo;
-import eth.bruises.org.domain.Department;
-import eth.bruises.org.query.DepartmentQuery;
-import eth.bruises.org.service.IDepartmentService;
+import eth.bruises.org.domain.Employee;
+import eth.bruises.org.query.EmployeeQuery;
+import eth.bruises.org.service.IEmployeeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -14,39 +14,39 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * 部门controller层
+ * 员工controller层
  *
  * @author bruises
  */
 @RestController
-@RequestMapping("/department")
+@RequestMapping("/employee")
 /**
  * 接口文档的注解
  */
-@Api(value = "部门的API",description="部门相关的CRUD功能")
-public class DepartmentController {
+@Api(value = "员工的API",description="员工相关的CRUD功能")
+public class EmployeeController {
     @Autowired
-    private IDepartmentService departmentService;
+    private IEmployeeService employeeService;
 
     @ApiOperation(value = "查询所有" )
     @GetMapping
-    public List<Department> selectAll() {
-        return departmentService.selectAll();
+    public List<Employee> selectAll() {
+        return employeeService.selectAll();
     }
 
     @ApiOperation(value = "根据id查询" )
     @GetMapping("{id}")
-    public Department selectOne(@ApiParam(value = "ID属性", required = true) @PathVariable("id") Long id) {
-        return departmentService.selectOne(id);
+    public Employee selectOne(@ApiParam(value = "ID属性", required = true) @PathVariable("id") Long id) {
+        return employeeService.selectOne(id);
     }
 
     @PutMapping
-    public AjaxResult addOrUpdate(@RequestBody Department department) {
+    public AjaxResult addOrUpdate(@RequestBody Employee employee) {
         try {
-            if (null == department.getId()) {
-                departmentService.add(department);
+            if (null == employee.getId()) {
+                employeeService.add(employee);
             } else {
-                departmentService.update(department);
+                employeeService.update(employee);
             }
             return AjaxResult.me();
         }catch (Exception e){
@@ -58,7 +58,7 @@ public class DepartmentController {
     @DeleteMapping("{id}")
     public AjaxResult delete(@PathVariable("id") Long id){
         try{
-            departmentService.delete(id);
+            employeeService.delete(id);
             return AjaxResult.me();
         }catch (Exception e){
             e.printStackTrace();
@@ -69,7 +69,7 @@ public class DepartmentController {
     @PatchMapping
     public AjaxResult batchDel(@RequestBody List<Long>ids){
         try {
-            departmentService.batchDel(ids);
+            employeeService.batchDel(ids);
             return AjaxResult.me();
         }catch (Exception e){
             e.printStackTrace();
@@ -78,13 +78,7 @@ public class DepartmentController {
     }
 
     @PostMapping
-    public PageInfo<Department> page(@RequestBody DepartmentQuery query){
-        return departmentService.page(query);
+    public PageInfo<Employee> page(@RequestBody EmployeeQuery query){
+        return employeeService.page(query);
     }
-
-    @GetMapping("/tree")
-    public List<Department> tree() {
-        return departmentService.tree();
-    }
-
 }

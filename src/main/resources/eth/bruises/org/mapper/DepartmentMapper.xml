@@ -49,19 +49,39 @@
         <include refid="searchByCondition"></include>
     </select>
 
-    <select id="queryByPage" resultType="department">
-        select td.*
+    <select id="queryByPage" resultMap="pageResultMap">
+        select td.*,te.id eId,te.username eUsername,p.id pId,p.name pName
         from t_department td
+        left join t_employee te on td.manager_id = te.id
+        left join t_department p on td.parent_id = p.id
         <include refid="searchByCondition"></include>
         order by td.id
         limit #{begin},#{pageSize}
     </select>
 
+    <resultMap id="pageResultMap" type="department">
+        <id column="id" property="id"></id>
+        <result column="sn" property="sn"></result>
+        <result column="name" property="name"></result>
+        <result column="dirPath" property="dirPath"></result>
+        <result column="state" property="state"></result>
+        <result column="manager_id" property="managerId"></result>
+        <result column="parent_id" property="parentId"></result>
+        <association property="manager" javaType="employee">
+            <id column="eId" property="id"></id>
+            <result column="eUsername" property="username"></result>
+        </association>
+        <association property="parent" javaType="department">
+            <id column="pId" property="id"></id>
+            <result column="pName" property="name"></result>
+        </association>
+    </resultMap>
+    
     <sql id="searchByCondition">
         <where>
-            <if test="null != name and !''.equals(name.trim())">
-                td.sn like concat('%',#{name},'%')
-                or td.name like concat('%',#{name},'%')
+            <if test="null != keyword and !''.equals(keyword.trim())">
+                td.sn like concat('%',#{keyword},'%')
+                or td.name like concat('%',#{keyword},'%')
             </if>
         </where>
     </sql>
