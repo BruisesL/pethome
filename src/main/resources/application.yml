@@ -7,7 +7,17 @@ spring:
     password: root123456
     url: jdbc:mysql:///pethome?useUnicode=true&characterEncoding=utf8
     driver-class-name: com.mysql.cj.jdbc.Driver
-
+  redis:
+    database: 0 # 连接的库
+    host: localhost
+    port: 6379
+    jedis:
+      pool:
+        min-idle: 2
+        max-idle: 8
+        max-active: 10
+        max-wait: 2000ms
+#    password: 123456 # 设置的密码
 mybatis:
   type-aliases-package: eth.bruises.*.domain,eth.bruises.*.query
   mapper-locations: eth/bruises/*/mapper/*Mapper.xml

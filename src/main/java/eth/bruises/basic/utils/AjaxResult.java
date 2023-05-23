@@ -10,9 +10,13 @@ import lombok.Data;
 @Data
 public class AjaxResult {
     /**
-     * 异步请求结果码
+     * 异步请求结果
      */
     private Boolean success = true;
+    /**
+     * 请求状态码
+     */
+    private String code = "0";
     /**
      * 请求结果信息
      */
@@ -29,68 +33,85 @@ public class AjaxResult {
     }
 
     /**
-     * 全参构造
-     *
-     * @param success
-     * @param message
-     * @param data
-     */
-    public AjaxResult(Boolean success, String message, Object data) {
-        this.success = success;
-        this.message = message;
-        this.data = data;
-    }
-
-    /**
-     * 无返回参数的构造方法
-     *
-     * @param success
-     * @param message
-     */
-    public AjaxResult(Boolean success, String message) {
-        this.success = success;
-        this.message = message;
-    }
-
-    /**
-     * 获取对象
+     * 获取成功状态的AjaxResult，无状态码、无状态信息、无数据实体
      *
      * @return
      */
-    public static AjaxResult me() {
+    public static AjaxResult success() {
         return new AjaxResult();
     }
 
     /**
-     * 设置success值并且获取
+     * 获取成功状态的AjaxResult，无数据实体
      *
-     * @param success
-     * @return
-     */
-    public AjaxResult setSuccess(Boolean success) {
-        this.success = success;
-        return this;
-    }
-
-    /**
-     * 设置message值并且获取
-     *
+     * @param code
      * @param message
      * @return
      */
-    public AjaxResult setMessage(String message) {
-        this.message = message;
-        return this;
+    public static AjaxResult success(String code, String message) {
+        AjaxResult ajaxResult = new AjaxResult();
+        ajaxResult.setCode(code);
+        ajaxResult.setMessage(message);
+        return ajaxResult;
     }
 
     /**
-     * 设置data值并且获取
+     * 获取成功状态的AjaxResult，仅有数据实体
      *
      * @param data
      * @return
      */
-    public AjaxResult setData(Object data) {
-        this.data = data;
-        return this;
+    public static AjaxResult success(Object data) {
+        AjaxResult ajaxResult = new AjaxResult();
+        ajaxResult.setData(data);
+        return ajaxResult;
+    }
+
+    /**
+     * 获取成功状态的AjaxResult,所有参数均有
+     *
+     * @param code
+     * @param message
+     * @param data
+     * @return
+     */
+    public static AjaxResult success(String code, String message, Object data) {
+        AjaxResult ajaxResult = new AjaxResult();
+        ajaxResult.setCode(code);
+        ajaxResult.setMessage(message);
+        ajaxResult.setData(data);
+        return ajaxResult;
+    }
+
+    /**
+     * 获取失败状态的AjaxResult，无数据实体
+     *
+     * @param code
+     * @param message
+     * @return
+     */
+    public static AjaxResult error(String code, String message) {
+        AjaxResult ajaxResult = new AjaxResult();
+        ajaxResult.setSuccess(false);
+        ajaxResult.setCode(code);
+        ajaxResult.setMessage(message);
+        return ajaxResult;
+    }
+
+    /**
+     * 获取失败状态的AjaxResult，所有参数均有
+     *
+     * @param code
+     * @param message
+     * @param data
+     * @return
+     */
+    public static AjaxResult error(String code, String message, Object data) {
+        AjaxResult ajaxResult = new AjaxResult();
+        ajaxResult.setSuccess(false);
+        ajaxResult.setCode(code);
+        ajaxResult.setMessage(message);
+        ajaxResult.setData(data);
+        return ajaxResult;
     }
 }
