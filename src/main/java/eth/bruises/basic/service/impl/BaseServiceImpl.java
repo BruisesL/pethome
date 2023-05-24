@@ -5,6 +5,7 @@ import eth.bruises.basic.query.BaseQuery;
 import eth.bruises.basic.service.BaseService;
 import eth.bruises.basic.utils.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 

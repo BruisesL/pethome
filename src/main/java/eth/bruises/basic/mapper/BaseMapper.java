@@ -26,25 +26,29 @@ public interface BaseMapper<T> {
      * 添加
      * @param t
      */
-    void add(T t);
+    int add(T t);
 
     /**
      * 修改
      * @param t
+     * @return int
      */
-    void update(T t);
+
+    int update(T t);
 
     /**
      * 删除
      * @param id
+     * @return int
      */
-    void delete(Long id);
+    int delete(Long id);
 
     /**
      * 批量删除
      * @param ids
+     * @return int
      */
-    void batchDel(List<Long> ids);
+    int batchDel(List<Long> ids);
 
     /**
      * 分页查询的数据条数
