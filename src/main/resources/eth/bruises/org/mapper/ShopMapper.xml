@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="eth.bruises.org.mapper.ShopMapper">
+    <select id="selectAll" resultType="shop">
+        select *
+        from t_shop
+    </select>
+
+    <select id="selectOne" resultType="shop">
+        select *
+        from t_shop
+        where id = #{id}
+    </select>
+
+    <insert id="add">
+        insert into t_shop (name, tel, registerTime, state, address, logo, admin_id)
+        values (#{name}, #{tel}, #{registerTime}, #{state}, #{address}, #{logo}, #{adminId})
+    </insert>
+
+    <update id="update">
+        update t_shop
+        set name=#{name},
+            tel=#{tel},
+            registerTime=#{registerTime},
+            state=#{state},
+            address=#{address},
+            logo=#{logo},
+            admin_id=#{adminId}
+
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+        delete
+        from t_shop
+        where id = #{id}
+    </delete>
+
+    <delete id="batchDel">
+        delete from t_shop where id in
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="queryByCount" resultType="Integer">
+        select count(1)
+        from t_shop ts
+        <include refid="searchByCondition"></include>
+    </select>
+
+    <select id="queryByPage" resultMap="pageResultMap">
+        select ts.*
+        from t_shop ts
+        <include refid="searchByCondition"></include>
+        order by ts.id
+        limit #{begin},#{pageSize}
+    </select>
+
+    <resultMap id="pageResultMap" type="shop">
+        <id column="id" property="id"></id>
+        <result column="name" property="name"></result>
+        <result column="tel" property="tel"></result>
+        <result column="registerTime" property="registerTime"></result>
+        <result column="state" property="state"></result>
+        <result column="address" property="address"></result>
+        <result column="logo" property="logo"></result>
+        <result column="admin_id" property="adminId"></result>
+
+    </resultMap>
+    
+    <sql id="searchByCondition">
+        <where>
+            <if test="null != keyword and !''.equals(keyword.trim())">
+                td.name like concat('%',#{keyword},'%')
+            </if>
+        </where>
+    </sql>
+</mapper>
