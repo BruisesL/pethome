@@ -52,8 +52,9 @@
     </select>
 
     <select id="queryByPage" resultMap="pageResultMap">
-        select ts.*
+        select ts.*, te.username ename
         from t_shop ts
+        left join t_employee te on te.id = ts.admin_id
         <include refid="searchByCondition"></include>
         order by ts.id
         limit #{begin},#{pageSize}
@@ -68,7 +69,9 @@
         <result column="address" property="address"></result>
         <result column="logo" property="logo"></result>
         <result column="admin_id" property="adminId"></result>
-
+        <association property="admin" javaType="employee">
+            <result column="ename" property="username"></result>
+        </association>
     </resultMap>
     
     <sql id="searchByCondition">

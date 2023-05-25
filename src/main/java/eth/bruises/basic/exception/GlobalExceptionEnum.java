@@ -15,7 +15,7 @@ public enum GlobalExceptionEnum {
     // 公共失败枚举
     ERROR("-1","系统繁忙，请稍后重试！"),
     // 参数校验异常
-    PARAM_ERROR("1001", "参数校验异常！")
+    PARAM_ERROR("1001", "参数校验异常！"),
     ;
 
     /**

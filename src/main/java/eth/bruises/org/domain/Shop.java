@@ -29,7 +29,7 @@ public class Shop extends BaseDomain {
     /**
      * 状态
      */
-    private String state;
+    private Integer state;
     /**
      * 店铺地址
      */
@@ -41,6 +41,11 @@ public class Shop extends BaseDomain {
     /**
      * 管理员ID
      */
-    private String adminId;
+    private Long adminId;
+
+    /**
+     * 管理员
+     */
+    private Employee admin;
 
 }

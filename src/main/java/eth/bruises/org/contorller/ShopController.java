@@ -20,9 +20,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/shop")
-/**
- * 接口文档的注解
- */
 @Api(value = "店铺的API", description = "店铺相关的CRUD功能")
 public class ShopController {
     @Autowired
