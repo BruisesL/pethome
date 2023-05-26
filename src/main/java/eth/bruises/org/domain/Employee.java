@@ -47,7 +47,6 @@ public class Employee extends BaseDomain {
     /**
      * 年龄
      */
-    @Min(value = 18, message = "不可为未成年")
     private Integer age;
     /**
      * 状态
@@ -65,4 +64,12 @@ public class Employee extends BaseDomain {
      * 所属店铺ID
      */
     private Long shopId;
+    /**
+     * 所属部门
+     */
+    private Department department;
+    /**
+     * 所属店铺
+     */
+    private Shop shop;
 }

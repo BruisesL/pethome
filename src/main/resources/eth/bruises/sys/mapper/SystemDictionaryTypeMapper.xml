@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="eth.bruises.sys.mapper.SystemDictionaryTypeMapper">
+
+    <select id="selectAll" resultType="systemDictionaryType">
+        select *
+        from t_systemdictionarytype
+    </select>
+
+    <select id="selectOne" resultType="systemDictionaryType">
+        select *
+        from t_systemdictionarytype
+        where id = #{id}
+    </select>
+
+    <insert id="add">
+        insert into t_systemdictionarytype (sn, name)
+        values (#{sn}, #{name})
+    </insert>
+
+    <update id="update">
+        update t_systemdictionarytype
+        set sn=#{sn},
+            name=#{name}
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+        delete
+        from t_systemdictionarytype
+        where id = #{id}
+    </delete>
+
+    <delete id="batchDel">
+        delete from t_systemdictionarytype where id in
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="queryByCount" resultType="Integer">
+        select count(1)
+        from t_systemdictionarytype tst
+        <include refid="searchByCondition"></include>
+    </select>
+
+    <select id="queryByPage" resultMap="queryByPageMap">
+        select tst.*
+        from t_systemdictionarytype tst
+        <include refid="searchByCondition"></include>
+        order by tst.id
+        limit #{begin},#{pageSize}
+    </select>
+
+    <resultMap id="queryByPageMap" type="systemDictionaryType">
+        <id column="id" property="id"></id>
+        <result column="sn" property="sn"></result>
+        <result column="name" property="name"></result>
+    </resultMap>
+    <sql id="searchByCondition">
+        <where>
+            <if test="null != keyword and !''.equals(keyword.trim())">
+                tst.sn like concat('%',#{keyword},'%')
+                or tst.name like concat('%',#{keyword},'%')
+
+            </if>
+        </where>
+    </sql>
+</mapper>

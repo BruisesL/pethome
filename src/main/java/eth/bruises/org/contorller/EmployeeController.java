@@ -20,9 +20,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/employee")
-/**
- * 接口文档的注解
- */
 @Api(value = "员工的API", description = "员工相关的CRUD功能")
 public class EmployeeController {
     @Autowired

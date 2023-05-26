@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="eth.bruises.sys.mapper.SystemDictionaryDetailMapper">
+
+    <select id="selectAll" resultType="systemDictionaryDetail">
+        select *
+        from t_systemDictionaryDetail
+    </select>
+
+    <select id="selectOne" resultType="systemDictionaryDetail">
+        select *
+        from t_systemDictionaryDetail
+        where id = #{id}
+    </select>
+
+    <insert id="add">
+        insert into t_systemDictionaryDetail (name, types_id)
+        values (#{name}, #{typesId})
+    </insert>
+
+    <update id="update">
+        update t_systemDictionaryDetail
+        set name=#{name},
+            types_id=#{typesId}
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+        delete
+        from t_systemDictionaryDetail
+        where id = #{id}
+    </delete>
+
+    <delete id="batchDel">
+        delete from t_systemDictionaryDetail where id in
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+    <delete id="delByTypesId">
+        delete
+        from t_systemdictionarydetail
+        where types_id = #{id}
+    </delete>
+    <delete id="delPatchByTypesId">
+        delete from t_systemDictionaryDetail where types_id in
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="queryByCount" resultType="Integer">
+        select count(1)
+        from t_systemDictionaryDetail tsd
+        <include refid="searchByCondition"></include>
+    </select>
+
+    <select id="queryByPage" resultMap="queryByPageMap">
+        select tsd.*,tst.name tname
+        from t_systemDictionaryDetail tsd
+        left join t_systemDictionaryType tst on tsd.types_id = tst.id
+        <include refid="searchByCondition"></include>
+        order by tsd.id
+        limit #{begin},#{pageSize}
+    </select>
+
+    <resultMap id="queryByPageMap" type="systemDictionaryDetail">
+        <id column="id" property="id"></id>
+        <result column="name" property="name"></result>
+        <result column="types_id" property="typesId"></result>
+        <association property="sdt" javaType="systemDictionaryType">
+            <result column="tname" property="name"></result>
+        </association>
+    </resultMap>
+    <sql id="searchByCondition">
+        <where>
+            <if test="null != keyword and !''.equals(keyword.trim())">
+                tsd.name like concat('%',#{keyword},'%')
+            </if>
+        </where>
+    </sql>
+</mapper>
