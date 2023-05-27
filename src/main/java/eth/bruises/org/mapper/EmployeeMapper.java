@@ -9,4 +9,10 @@ import eth.bruises.org.domain.Employee;
  * @author bruises
  */
 public interface EmployeeMapper extends BaseMapper<Employee> {
+    /**
+     * 通过手机号查找用户
+     * @param phone
+     * @return
+     */
+    Employee findByPhone(String phone);
 }

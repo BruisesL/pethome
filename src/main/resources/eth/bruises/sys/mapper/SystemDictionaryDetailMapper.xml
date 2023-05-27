@@ -79,6 +79,9 @@
             <if test="null != keyword and !''.equals(keyword.trim())">
                 tsd.name like concat('%',#{keyword},'%')
             </if>
+            <if test="null != typesId">
+                and tsd.types_id = #{typesId}
+            </if>
         </where>
     </sql>
 </mapper>

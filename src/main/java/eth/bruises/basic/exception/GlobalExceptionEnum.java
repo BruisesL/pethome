@@ -16,6 +16,8 @@ public enum GlobalExceptionEnum {
     ERROR("-1","系统繁忙，请稍后重试！"),
     // 参数校验异常
     PARAM_ERROR("1001", "参数校验异常！"),
+    SHOP_EXISTS("1002", "店铺已存在！"),
+    SHOP_ADMIN_EXISTS("1003", "管理员已存在！"),
     ;
 
     /**

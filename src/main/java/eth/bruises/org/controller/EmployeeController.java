@@ -1,4 +1,4 @@
-package eth.bruises.org.contorller;
+package eth.bruises.org.controller;
 
 import eth.bruises.basic.utils.AjaxResult;
 import eth.bruises.basic.utils.PageInfo;

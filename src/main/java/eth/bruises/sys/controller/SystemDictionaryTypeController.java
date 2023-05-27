@@ -27,7 +27,7 @@ public class SystemDictionaryTypeController {
     }
 
     @PostMapping
-    public PageInfo<SystemDictionaryType> findByCondition(@RequestBody SystemDictionaryTypeQuery query) {
+    public PageInfo<SystemDictionaryType> page(@RequestBody SystemDictionaryTypeQuery query) {
         return service.page(query);
     }
 

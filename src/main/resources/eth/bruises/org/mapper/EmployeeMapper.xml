@@ -14,7 +14,7 @@
         where id = #{id}
     </select>
 
-    <insert id="add">
+    <insert id="add" parameterType="Employee" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         insert into t_Employee (username, phone, email, salt, password, age, state, department_id, logininfo_id, shop_id)
         values (#{username}, #{phone}, #{email}, #{salt}, #{password}, #{age}, #{state}, #{departmentId}, #{logininfoId}, #{shopId})
     </insert>
@@ -59,6 +59,10 @@
         <include refid="searchByCondition"></include>
         order by te.id
         limit #{begin},#{pageSize}
+    </select>
+    <!--  通过手机号查找用户  -->
+    <select id="findByPhone" resultType="eth.bruises.org.domain.Employee">
+        select * from t_employee where phone = #{phone}
     </select>
 
     <resultMap id="pageResultMap" type="Employee">

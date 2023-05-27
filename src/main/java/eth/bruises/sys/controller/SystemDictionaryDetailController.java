@@ -32,7 +32,7 @@ public class SystemDictionaryDetailController {
     }
 
     @PostMapping
-    public PageInfo<SystemDictionaryDetail> findByCondition(@RequestBody SystemDictionaryDetailQuery query) {
+    public PageInfo<SystemDictionaryDetail> page(@RequestBody SystemDictionaryDetailQuery query) {
         return service.page(query);
     }
 

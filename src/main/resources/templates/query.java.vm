@@ -1,0 +1,8 @@
+package ${cfg.parent}.query;
+import eth.bruises.basic.query.BaseQuery;
+
+/**
+ * 查询类：
+ */
+public class ${table.entityName}Query extends BaseQuery{
+}

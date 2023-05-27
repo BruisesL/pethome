@@ -8,8 +8,9 @@ import org.csource.fastdfs.*;
  * @author bruises
  */
 public class FastdfsUtil {
-
-    //加载配置文件
+    /**
+     * 加载配置文件
+     */
     public static String CONF_FILENAME  = FastdfsUtil.class.getClassLoader() .getResource("fdfs_client.conf").getFile();
 
 

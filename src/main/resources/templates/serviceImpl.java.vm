@@ -1,0 +1,20 @@
+package ${package.ServiceImpl};
+
+import ${package.Entity}.${entity};
+import ${package.Service}.${table.serviceName};
+import ${superServiceImplClassPackage};
+import org.springframework.stereotype.Service;
+
+/**
+ * 业务实现类：$!{table.comment}
+ */
+@Service
+#if(${kotlin})
+open class ${table.serviceImplName} : ${superServiceImplClass}<${table.mapperName}, ${entity}>(), ${table.serviceName} {
+
+}
+#else
+public class ${table.serviceImplName} extends ${superServiceImplClass}<${entity}> implements ${table.serviceName} {
+
+}
+#end

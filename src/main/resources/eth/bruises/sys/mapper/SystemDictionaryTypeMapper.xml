@@ -64,7 +64,6 @@
             <if test="null != keyword and !''.equals(keyword.trim())">
                 tst.sn like concat('%',#{keyword},'%')
                 or tst.name like concat('%',#{keyword},'%')
-
             </if>
         </where>
     </sql>
