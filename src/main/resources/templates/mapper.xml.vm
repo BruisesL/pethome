@@ -71,7 +71,7 @@
         select * from ${table.name}
     </select>
     <!--查询总数=参数（查询对象），返回值：long-->
-    <select id="queryByCount" parameterType="${entity}Query" resultType="long">
+    <select id="queryByCount" parameterType="${entity}Query" resultType="integer">
         select count(*) from ${table.name}
         <include refid="whereSql"/>
     </select>

@@ -18,6 +18,17 @@ spring:
         max-active: 10
         max-wait: 2000ms
 #    password: 123456 # 设置的密码
+  mail:
+    host: smtp.qq.com   # 设置邮箱主机(服务商),这里使用QQ邮件服务器
+    username: bruisesluo@qq.com  # 设置用户名 - 发送方
+    password: akuxxapufbcnfhag   # 设置密码，该处的密码是QQ邮箱开启SMTP的授权码而非QQ密码
+    properties:
+      mail:
+        smtp:
+          auth: true  # 必须进行授权认证，它的目的就是阻止他人任意乱发邮件
+          starttls: #SMTP加密方式:连接到一个TLS保护连接
+            enable: true
+            required: true
 mybatis:
   type-aliases-package: eth.bruises.*.domain,eth.bruises.*.query
   mapper-locations: eth/bruises/*/mapper/*Mapper.xml

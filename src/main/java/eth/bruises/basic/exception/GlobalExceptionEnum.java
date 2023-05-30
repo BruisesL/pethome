@@ -18,7 +18,16 @@ public enum GlobalExceptionEnum {
     PARAM_ERROR("1001", "参数校验异常！"),
     SHOP_EXISTS("1002", "店铺已存在！"),
     SHOP_ADMIN_EXISTS("1003", "管理员已存在！"),
+    TEXT_CENSOR_ERROR("1004", "文字包含敏感字符，请修改！"),
+    IMG_CENSOR_ERROR("1005", "图片不合规，请修改！"),
+
+    SHOP_ADMIN_NOT_EXIST("1006", "店铺不存在！"),
+    SHOP_NOT_EXIST("1007", "店铺未查询到管理员不存在！"),
+    SHOP_STATE_ERROR("1008", "店铺状态异常！"),
+
+
     ;
+
 
     /**
      * 错误码

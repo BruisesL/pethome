@@ -29,7 +29,7 @@
             age=#{age},
             state=#{state},
             department_id=#{departmentId},
-            logininfo_id=#{logininfoId}
+            logininfo_id=#{logininfoId},
             shop_id=#{shopId}
         where id = #{id}
     </update>

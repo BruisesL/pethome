@@ -6,6 +6,7 @@ import eth.bruises.org.domain.Employee;
 import eth.bruises.org.service.IDepartmentService;
 import eth.bruises.org.service.IEmployeeService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author bruises
