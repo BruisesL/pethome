@@ -12,7 +12,8 @@ import java.lang.annotation.*;
 @Target( ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Constraint(validatedBy = PhoneValidator.class)//此处指定了校验规则/器
+// 此处指定了校验规则器
+@Constraint(validatedBy = PhoneValidator.class)
 public @interface Phone {
     //SpringValidator必要的三个属性
     String message() default "无效的手机格式";

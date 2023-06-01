@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="eth.bruises.user.mapper.LogininfoMapper">
+    <!--保存对象-->
+    <insert id="add" parameterType="Logininfo" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into t_logininfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                                            <if test="username != null">
+                            username,
+                        </if>
+                                            <if test="phone != null">
+                            phone,
+                        </if>
+                                            <if test="email != null">
+                            email,
+                        </if>
+                                            <if test="salt != null">
+                            salt,
+                        </if>
+                                            <if test="password != null">
+                            password,
+                        </if>
+                                            <if test="type != null">
+                            type,
+                        </if>
+                                            <if test="disable != null">
+                            disable,
+                        </if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+                                            <if test="username != null">
+#{username}                            ,
+                        </if>
+                                            <if test="phone != null">
+#{phone}                            ,
+                        </if>
+                                            <if test="email != null">
+#{email}                            ,
+                        </if>
+                                            <if test="salt != null">
+#{salt}                            ,
+                        </if>
+                                            <if test="password != null">
+#{password}                            ,
+                        </if>
+                                            <if test="type != null">
+#{type}                            ,
+                        </if>
+                                            <if test="disable != null">
+#{disable}                            ,
+                        </if>
+        </trim>
+    </insert>
+    <!--删除对象-->
+    <delete id="delete" parameterType="long">
+        delete from t_logininfo where id = #{id}
+    </delete>
+
+    <!--更新对象-->
+    <update id="update" parameterType="Logininfo">
+        update t_logininfo
+        <set>
+                                            <if test="username != null">
+                            username = #{username},
+                        </if>
+                                            <if test="phone != null">
+                            phone = #{phone},
+                        </if>
+                                            <if test="email != null">
+                            email = #{email},
+                        </if>
+                                            <if test="salt != null">
+                            salt = #{salt},
+                        </if>
+                                            <if test="password != null">
+                            password = #{password},
+                        </if>
+                                            <if test="type != null">
+                            type = #{type},
+                        </if>
+                                            <if test="disable != null">
+                            disable = #{disable}                        </if>
+        </set>
+        where id = #{id}
+    </update>
+    <!--查找单个对象-->
+    <select id="selectOne" resultMap="BaseResultMap" parameterType="long">
+        select * from t_logininfo where id = #{id}
+    </select>
+    <!--查找所有对象-->
+    <select id="selectAll" resultMap="BaseResultMap">
+        select * from t_logininfo
+    </select>
+    <!--查询总数=参数（查询对象），返回值：long-->
+    <select id="queryByCount" parameterType="LogininfoQuery" resultType="integer">
+        select count(*) from t_logininfo
+        <include refid="whereSql"/>
+    </select>
+    <!--查询当前页数据=参数（查询对象），返回值:List-->
+    <select id="queryByPage" parameterType="LogininfoQuery" resultMap="BaseResultMap">
+        select * from t_logininfo
+        <include refid="whereSql"/>
+        limit #{begin},#{pageSize}
+    </select>
+
+
+    <sql id="whereSql">
+        <where>
+            <if test="keyword!=null and keyword!=''">
+                and (name like concat('%',#{keyword},'%'))
+            </if>
+        </where>
+    </sql>
+
+    <!--批量删除-->
+    <delete id="batchDel" parameterType="arraylist">
+        delete from t_logininfo where id in
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="eth.bruises.user.domain.Logininfo">
+        <id column="id" property="id" />
+        <result column="username" property="username" />
+        <result column="phone" property="phone" />
+        <result column="email" property="email" />
+        <result column="salt" property="salt" />
+        <result column="password" property="password" />
+        <result column="type" property="type" />
+        <result column="disable" property="disable" />
+    </resultMap>
+
+</mapper>

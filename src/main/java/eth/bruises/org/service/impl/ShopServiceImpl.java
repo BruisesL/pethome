@@ -18,6 +18,9 @@ import eth.bruises.org.mapper.ShopMapper;
 import eth.bruises.org.service.IShopService;
 import eth.bruises.basic.service.impl.BaseServiceImpl;
 import eth.bruises.org.vo.ShopStatisticsVo;
+import eth.bruises.user.domain.Logininfo;
+import eth.bruises.user.mapper.LogininfoMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +41,9 @@ public class ShopServiceImpl extends BaseServiceImpl<Shop> implements IShopServi
 
     @Autowired
     private EmployeeMapper employeeMapper;
+
+    @Autowired
+    private LogininfoMapper logininfoMapper;
 
     @Autowired
     private ShopAuditLogMapper shopAuditLogMapper;
@@ -101,6 +107,8 @@ public class ShopServiceImpl extends BaseServiceImpl<Shop> implements IShopServi
             shop.setState(1);
             shopMapper.update(shop);
             // 删除原店铺管理员
+            Employee employee = employeeMapper.selectOne(existShop.getAdminId());
+            logininfoMapper.delete(employee.getLogininfoId());
             employeeMapper.delete(existShop.getAdminId());
         }
         // 店铺为空 则第一次注册
@@ -125,6 +133,9 @@ public class ShopServiceImpl extends BaseServiceImpl<Shop> implements IShopServi
         // 密码加盐加密
         String password = SecureUtil.md5(salt + admin.getPassword());
         admin.setPassword(password);
+        Logininfo logininfo = copyEmployee(admin);
+        logininfoMapper.add(logininfo);
+        admin.setLogininfoId(logininfo.getId());
         employeeMapper.add(admin);
 
         // 回写adminId
@@ -202,6 +213,9 @@ public class ShopServiceImpl extends BaseServiceImpl<Shop> implements IShopServi
             throw new GlobalException(GlobalExceptionEnum.SHOP_ADMIN_NOT_EXIST);
         }
         employee.setState(1);
+        Logininfo logininfo = logininfoMapper.selectOne(employee.getLogininfoId());
+        logininfo.setDisable(true);
+        logininfoMapper.update(logininfo);
         employeeMapper.update(employee);
     }
 
@@ -239,6 +253,20 @@ public class ShopServiceImpl extends BaseServiceImpl<Shop> implements IShopServi
 
         }
         return shop;
+    }
+
+    /**
+     * 复制employee到logininfo
+     *
+     * @param employee
+     * @return
+     */
+    private Logininfo copyEmployee(Employee employee) {
+        Logininfo logininfo = new Logininfo();
+        BeanUtils.copyProperties(employee, logininfo);
+        logininfo.setType(0);
+        logininfo.setDisable(employee.getState() == 1);
+        return logininfo;
     }
 
 }

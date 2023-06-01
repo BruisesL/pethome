@@ -1,5 +1,6 @@
 package eth.bruises.test;
 
+import cn.hutool.extra.spring.SpringUtil;
 import eth.bruises.PetHomeApp;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,9 +10,11 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = PetHomeApp.class)
@@ -24,14 +27,14 @@ public class RedisTest {
     public void redisTest() throws Exception {
         redisTemplate.opsForValue().set("age", "1");
 
-        redisTemplate.opsForValue().increment("age",2);
+        redisTemplate.opsForValue().increment("age", 2);
 
         System.out.println(redisTemplate.opsForValue().get("age"));
 
         System.out.println("============multiSet&multiGet============");
         Map<String, String> map = new HashMap<>();
-        map.put("name","bruises");
-        map.put("gender","male");
+        map.put("name", "bruises");
+        map.put("gender", "male");
         redisTemplate.opsForValue().multiSet(map);
         List<String> keys = new ArrayList<>();
         keys.add("name");
@@ -53,5 +56,28 @@ public class RedisTest {
             }
         });
 
+    }
+
+    @Test
+    public void test() throws Exception {
+        redisTemplate.opsForValue().set("test", "time", 3600, TimeUnit.SECONDS);
+    }
+
+    @Test
+    public void expireTest() throws Exception {
+        Long time = 3600 - redisTemplate.getExpire("test");
+        if (time < 60) {
+            System.out.println(time + "seconds passed. Within 1 minute");
+        } else {
+            System.out.println(time + "seconds passed. Over 1 minute");
+        }
+        JavaMailSender javaMailSender = SpringUtil.getBean(JavaMailSender.class);
+    }
+
+    @Test
+    public void test1() throws Exception{
+        redisTemplate.opsForValue().set("112122","1");
+        Long expire = redisTemplate.getExpire("112122");
+        System.out.println(expire);
     }
 }

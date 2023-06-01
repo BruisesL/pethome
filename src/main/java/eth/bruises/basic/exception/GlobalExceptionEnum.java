@@ -24,6 +24,13 @@ public enum GlobalExceptionEnum {
     SHOP_ADMIN_NOT_EXIST("1006", "店铺不存在！"),
     SHOP_NOT_EXIST("1007", "店铺未查询到管理员不存在！"),
     SHOP_STATE_ERROR("1008", "店铺状态异常！"),
+    GRAPHIC_VERIFICATION_HAS_EXPIRED("1009", "图形验证码已过期！"),
+    GRAPHIC_VERIFICATION_ERROR("1010", "图形验证码错误！"),
+    USER_EXISTS("1011", "用户已存在！"),
+    MESSAGE_SEND_ERROR("1012", "请勿重复发送短信！"),
+    VERIFICATION_CODE_HAS_EXPIRED("1013", "验证码已过期！"),
+    VERIFICATION_CODE_ERROR("1014", "验证码错误！"),
+    TWO_PASSWORDS_NOT_MATCH("1015", "两次密码不匹配！"),
 
 
     ;
