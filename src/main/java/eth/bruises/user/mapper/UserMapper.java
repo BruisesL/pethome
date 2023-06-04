@@ -25,4 +25,5 @@ public interface UserMapper extends BaseMapper<User> {
      * @return
      */
     User findByEmail(String email);
+
 }

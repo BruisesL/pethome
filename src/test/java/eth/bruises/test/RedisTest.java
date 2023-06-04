@@ -76,8 +76,8 @@ public class RedisTest {
 
     @Test
     public void test1() throws Exception{
-        redisTemplate.opsForValue().set("112122","1");
-        Long expire = redisTemplate.getExpire("112122");
+        redisTemplate.opsForValue().set("112122","1" , 30, TimeUnit.MINUTES);
+        Long expire = redisTemplate.getExpire("112122" , TimeUnit.MILLISECONDS);
         System.out.println(expire);
     }
 }

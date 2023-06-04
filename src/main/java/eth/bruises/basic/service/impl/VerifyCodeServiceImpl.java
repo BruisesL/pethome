@@ -37,6 +37,8 @@ public class VerifyCodeServiceImpl implements IVerifyCodeService {
     private UserMapper userMapper;
 
     private static String REGISTER_CODE_KEY = "register:%s";
+    public static String REGISTER_WXPHONE_CODE_KEY = "wx_register:%s";
+
 
     /**
      * 生成图形验证码的base64值
@@ -79,16 +81,7 @@ public class VerifyCodeServiceImpl implements IVerifyCodeService {
         // 业务逻辑
         // 判断是否是一分钟以内发送的
         String phoneKey = String.format(REGISTER_CODE_KEY, dto.getPhone());
-        Long expire = redisTemplate.getExpire(phoneKey, TimeUnit.MILLISECONDS);
-        String code = "";
-        if (expire == null || expire < 240000) {
-            // 生成手机验证码
-            code = RandomUtil.randomString(6);
-        } else {
-            throw new GlobalException(GlobalExceptionEnum.MESSAGE_SEND_ERROR);
-        }
-        // 存redis
-        redisTemplate.opsForValue().set(phoneKey, code, 300000, TimeUnit.MILLISECONDS);
+        String code = getCode(phoneKey);
         // 发短信
 //        SendSmsUtil.sendSms(dto.getPhone(), "您的验证码是：" + code);
         System.out.println("您的验证码是：" + code);
@@ -116,7 +109,35 @@ public class VerifyCodeServiceImpl implements IVerifyCodeService {
         // 业务逻辑
         // 判断是否是一分钟以内发送的
         String emailKey = String.format(REGISTER_CODE_KEY, dto.getEmail());
-        Long expire = redisTemplate.getExpire(emailKey, TimeUnit.MILLISECONDS);
+        String code = getCode(emailKey);
+
+        // 发邮件
+        SendEmailUtil.sendMail(dto.getEmail(), "邮箱验证码接收", "您的验证码是：" + code);
+//        SendSmsUtil.sendSms(dto.getPhone(), "您的验证码是：" + code);
+        System.out.println("您的验证码是：" + code);
+        return AjaxResult.success();
+    }
+
+
+
+    @Override
+    public AjaxResult wxPhoneCode(String phone) {
+        // 拼接redis存储的业务键的key
+        String key = String.format(REGISTER_WXPHONE_CODE_KEY, phone);
+        String code = getCode(key);
+        // 发短信
+//        SendSmsUtil.sendSms(dto.getPhone(), "您的验证码是：" + code);
+        System.out.println("您的验证码是：" + code);
+        return AjaxResult.success();
+    }
+
+    /**
+     * 抽取方法，判断key是否已在redis内有有效值，返回验证码
+     * @param key
+     * @return
+     */
+    private String getCode(String key) {
+        Long expire = redisTemplate.getExpire(key, TimeUnit.MILLISECONDS);
         String code = "";
         if (expire == null || expire < 240000) {
             // 生成邮件验证码
@@ -125,11 +146,7 @@ public class VerifyCodeServiceImpl implements IVerifyCodeService {
             throw new GlobalException(GlobalExceptionEnum.MESSAGE_SEND_ERROR);
         }
         // 存redis
-        redisTemplate.opsForValue().set(emailKey, code, 300000, TimeUnit.MILLISECONDS);
-        // 发邮件
-        SendEmailUtil.sendMail(dto.getEmail(), "邮箱验证码接收", "您的验证码是：" + code);
-//        SendSmsUtil.sendSms(dto.getPhone(), "您的验证码是：" + code);
-        System.out.println("您的验证码是：" + code);
-        return AjaxResult.success();
+        redisTemplate.opsForValue().set(key, code, 300000, TimeUnit.MILLISECONDS);
+        return code;
     }
 }

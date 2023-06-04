@@ -38,5 +38,8 @@ public class VerifyCodeController {
         return verifyCodeService.emailCode(dto);
     }
 
-
+    @PostMapping("/wxPhoneCode/{phone}")
+    public AjaxResult wxPhoneCode(@PathVariable("phone") String phone) {
+        return verifyCodeService.wxPhoneCode(phone);
+    }
 }

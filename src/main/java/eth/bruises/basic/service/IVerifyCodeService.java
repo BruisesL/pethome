@@ -33,4 +33,11 @@ public interface IVerifyCodeService {
      * @return AjaxResult
      */
     AjaxResult emailCode(EmailCodeDto dto);
+
+    /**
+     * 发送微信手机验证码
+     * @param phone
+     * @return
+     */
+    AjaxResult wxPhoneCode(String phone);
 }

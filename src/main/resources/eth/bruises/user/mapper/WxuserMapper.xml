@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="eth.bruises.user.mapper.WxuserMapper">
+    <!--保存对象-->
+    <insert id="add" parameterType="Wxuser" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into t_wxuser
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                                            <if test="openid != null">
+                            openid,
+                        </if>
+                                            <if test="nickname != null">
+                            nickname,
+                        </if>
+                                            <if test="sex != null">
+                            sex,
+                        </if>
+                                            <if test="address != null">
+                            address,
+                        </if>
+                                            <if test="headimgurl != null">
+                            headimgurl,
+                        </if>
+                                            <if test="unionid != null">
+                            unionid,
+                        </if>
+                                            <if test="userId != null">
+                            user_id,
+                        </if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+                                            <if test="openid != null">
+#{openid}                            ,
+                        </if>
+                                            <if test="nickname != null">
+#{nickname}                            ,
+                        </if>
+                                            <if test="sex != null">
+#{sex}                            ,
+                        </if>
+                                            <if test="address != null">
+#{address}                            ,
+                        </if>
+                                            <if test="headimgurl != null">
+#{headimgurl}                            ,
+                        </if>
+                                            <if test="unionid != null">
+#{unionid}                            ,
+                        </if>
+                                            <if test="userId != null">
+#{userId}                            ,
+                        </if>
+        </trim>
+    </insert>
+    <!--删除对象-->
+    <delete id="delete" parameterType="long">
+        delete from t_wxuser where id = #{id}
+    </delete>
+
+    <!--更新对象-->
+    <update id="update" parameterType="Wxuser">
+        update t_wxuser
+        <set>
+                                            <if test="openid != null">
+                            openid = #{openid},
+                        </if>
+                                            <if test="nickname != null">
+                            nickname = #{nickname},
+                        </if>
+                                            <if test="sex != null">
+                            sex = #{sex},
+                        </if>
+                                            <if test="address != null">
+                            address = #{address},
+                        </if>
+                                            <if test="headimgurl != null">
+                            headimgurl = #{headimgurl},
+                        </if>
+                                            <if test="unionid != null">
+                            unionid = #{unionid},
+                        </if>
+                                            <if test="userId != null">
+                            user_id = #{userId}                        </if>
+        </set>
+        where id = #{id}
+    </update>
+    <!--查找单个对象-->
+    <select id="selectOne" resultMap="BaseResultMap" parameterType="long">
+        select * from t_wxuser where id = #{id}
+    </select>
+    <!--查找所有对象-->
+    <select id="selectAll" resultMap="BaseResultMap">
+        select * from t_wxuser
+    </select>
+    <!--查询总数=参数（查询对象），返回值：long-->
+    <select id="queryByCount" parameterType="WxuserQuery" resultType="integer">
+        select count(*) from t_wxuser
+        <include refid="whereSql"/>
+    </select>
+    <!--查询当前页数据=参数（查询对象），返回值:List-->
+    <select id="queryByPage" parameterType="WxuserQuery" resultMap="BaseResultMap">
+        select * from t_wxuser
+        <include refid="whereSql"/>
+        limit #{begin},#{pageSize}
+    </select>
+    <select id="findByOpenid" resultType="eth.bruises.user.domain.Wxuser">
+        select * from t_wxuser where openid = #{openid}
+    </select>
+    <select id="findByUserId" resultType="eth.bruises.user.domain.Wxuser">
+        select * from t_wxuser where user_id = #{userId}
+
+    </select>
+
+
+    <sql id="whereSql">
+        <where>
+            <if test="keyword!=null and keyword!=''">
+                and (name like concat('%',#{keyword},'%'))
+            </if>
+        </where>
+    </sql>
+
+    <!--批量删除-->
+    <delete id="batchDel" parameterType="arraylist">
+        delete from t_wxuser where id in
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="eth.bruises.user.domain.Wxuser">
+        <id column="id" property="id" />
+        <result column="openid" property="openid" />
+        <result column="nickname" property="nickname" />
+        <result column="sex" property="sex" />
+        <result column="address" property="address" />
+        <result column="headimgurl" property="headimgurl" />
+        <result column="unionid" property="unionid" />
+        <result column="user_id" property="userId" />
+    </resultMap>
+
+</mapper>

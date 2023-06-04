@@ -31,6 +31,9 @@ public enum GlobalExceptionEnum {
     VERIFICATION_CODE_HAS_EXPIRED("1013", "验证码已过期！"),
     VERIFICATION_CODE_ERROR("1014", "验证码错误！"),
     TWO_PASSWORDS_NOT_MATCH("1015", "两次密码不匹配！"),
+    INCORRECT_USERNAME_OR_PASSWORD("1016","账号或密码错误"),
+    ACCOUNT_DISABLED("1017","账号已禁用"),
+    WECHAT_LOGIN_HAS_EXPIRED("1009", "微信登陆已过期，请重新扫码！"),
 
 
     ;
