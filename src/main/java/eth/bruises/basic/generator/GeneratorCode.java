@@ -52,7 +52,7 @@ public class GeneratorCode {
         // 表名生成策略
         strategy.setNaming(NamingStrategy.underline_to_camel);
         // 需要生成的表
-        strategy.setInclude(new String[]{"t_wxuser"});
+        strategy.setInclude(new String[]{"t_role", "t_menu", "t_permission"});
         strategy.setSuperEntityClass("eth.bruises.basic.domain.BaseDomain");
         strategy.setSuperServiceClass("eth.bruises.basic.service.BaseService");
         strategy.setSuperServiceImplClass("eth.bruises.basic.service.impl.BaseServiceImpl");

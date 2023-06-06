@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="eth.bruises.sys.mapper.MenuMapper">
+    <!--保存对象-->
+    <insert id="add" parameterType="Menu" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into t_menu
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                                            <if test="name != null">
+                            name,
+                        </if>
+                                            <if test="component != null">
+                            component,
+                        </if>
+                                            <if test="url != null">
+                            url,
+                        </if>
+                                            <if test="icon != null">
+                            icon,
+                        </if>
+                                            <if test="index != null">
+                            index,
+                        </if>
+                                            <if test="parentId != null">
+                            parent_id,
+                        </if>
+                                            <if test="intro != null">
+                            intro,
+                        </if>
+                                            <if test="state != null">
+                            state,
+                        </if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+                                            <if test="name != null">
+#{name}                            ,
+                        </if>
+                                            <if test="component != null">
+#{component}                            ,
+                        </if>
+                                            <if test="url != null">
+#{url}                            ,
+                        </if>
+                                            <if test="icon != null">
+#{icon}                            ,
+                        </if>
+                                            <if test="index != null">
+#{index}                            ,
+                        </if>
+                                            <if test="parentId != null">
+#{parentId}                            ,
+                        </if>
+                                            <if test="intro != null">
+#{intro}                            ,
+                        </if>
+                                            <if test="state != null">
+#{state}                            ,
+                        </if>
+        </trim>
+    </insert>
+    <!--删除对象-->
+    <delete id="delete" parameterType="long">
+        delete from t_menu where id = #{id}
+    </delete>
+
+    <!--更新对象-->
+    <update id="update" parameterType="Menu">
+        update t_menu
+        <set>
+                                            <if test="name != null">
+                            name = #{name},
+                        </if>
+                                            <if test="component != null">
+                            component = #{component},
+                        </if>
+                                            <if test="url != null">
+                            url = #{url},
+                        </if>
+                                            <if test="icon != null">
+                            icon = #{icon},
+                        </if>
+                                            <if test="index != null">
+                            index = #{index},
+                        </if>
+                                            <if test="parentId != null">
+                            parent_id = #{parentId},
+                        </if>
+                                            <if test="intro != null">
+                            intro = #{intro},
+                        </if>
+                                            <if test="state != null">
+                            state = #{state}                        </if>
+        </set>
+        where id = #{id}
+    </update>
+    <!--查找单个对象-->
+    <select id="selectOne" resultMap="BaseResultMap" parameterType="long">
+        select * from t_menu where id = #{id}
+    </select>
+    <!--查找所有对象-->
+    <select id="selectAll" resultMap="BaseResultMap">
+        select * from t_menu
+    </select>
+    <!--查询总数=参数（查询对象），返回值：long-->
+    <select id="queryByCount" parameterType="MenuQuery" resultType="integer">
+        select count(*) from t_menu m
+        <include refid="whereSql"/>
+    </select>
+    <!--查询当前页数据=参数（查询对象），返回值:List-->
+    <select id="queryByPage" parameterType="MenuQuery" resultMap="BaseResultMap">
+        select m.*, e.id eId, e.name eName from t_menu m join t_menu e on m.parent_id = e.id
+        <include refid="whereSql"/>
+        limit #{begin},#{pageSize}
+    </select>
+
+
+    <sql id="whereSql">
+        <where>
+            <if test="keyword!=null and keyword!=''">
+                and (name like concat('%',#{keyword},'%'))
+            </if>
+        </where>
+    </sql>
+
+    <!--批量删除-->
+    <delete id="batchDel" parameterType="arraylist">
+        delete from t_menu where id in
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="eth.bruises.sys.domain.Menu">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="component" property="component" />
+        <result column="url" property="url" />
+        <result column="icon" property="icon" />
+        <result column="index" property="index" />
+        <result column="parent_id" property="parentId" />
+        <result column="intro" property="intro" />
+        <result column="state" property="state" />
+        <association property="parent" javaType="menu">
+            <id column="eId" property="id" />
+            <result column="eName" property="name" />
+        </association>
+    </resultMap>
+
+</mapper>

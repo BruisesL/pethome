@@ -21,7 +21,7 @@ public class LoginConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**")
                 .excludePathPatterns("/login","/wxLogin/**", "/verify/**",
                         "/shop/settlement", "/shop/active/**",
-                        "/fastdfs/**", "/wxLogin/**", "/wxuser/wechatBinding/**");
+                        "/fastdfs/**", "/wxLogin/**", "/wxuser/wxBinding/**");
         WebMvcConfigurer.super.addInterceptors(registry);
     }
 }

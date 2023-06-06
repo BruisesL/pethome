@@ -22,6 +22,7 @@ import eth.bruises.user.service.IWxuserService;
 import eth.bruises.basic.service.impl.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.TimeUnit;

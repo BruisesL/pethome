@@ -44,10 +44,10 @@ public class LoginServiceImpl implements ILoginService {
 
     @Autowired
     private WxuserMapper wxuserMapper;
+
     @Autowired
     private UserMapper userMapper;
-    @Autowired
-    private LogininfoMapper logininfoMapper;
+
 
     @Override
     public LoginVo login(LoginDto loginDto) {

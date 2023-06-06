@@ -1,5 +1,6 @@
 package eth.bruises.user.controller;
 
+import eth.bruises.basic.annotation.PreAuthorize;
 import eth.bruises.user.dto.EmailRegisterDto;
 import eth.bruises.user.dto.PhoneRegisterDto;
 import eth.bruises.user.service.IUserService;
@@ -28,6 +29,7 @@ public class UserController {
      * @param user  传递的实体
      * @return AjaxResult 响应给前端
      */
+    @PreAuthorize(name="用户保存", sn="user:save")
     @PutMapping
     public AjaxResult addOrUpdate(@RequestBody User user){ 
         if( user.getId()!=null){
@@ -44,6 +46,7 @@ public class UserController {
     * @param id
     * @return AjaxResult 响应给前端
     */
+    @PreAuthorize(name="用户删除", sn="user:delete")
     @DeleteMapping(value="/{id}")
     public AjaxResult delete(@PathVariable("id") Long id){
         userService.delete(id);
@@ -55,6 +58,7 @@ public class UserController {
     * @param ids
     * @return AjaxResult 响应给前端
     */
+    @PreAuthorize(name="用户批量删除", sn="user:patchDel")
     @PatchMapping
     public AjaxResult batchDel(@RequestBody List<Long> ids){
         userService.batchDel(ids);
