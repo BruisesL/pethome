@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="eth.bruises.pet.mapper.SearchMasterMsgMapper">
+    <!--保存对象-->
+    <insert id="add" parameterType="SearchMasterMsg" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into t_search_master_msg
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                                            <if test="title != null">
+                            title,
+                        </if>
+                                            <if test="state != null">
+                            state,
+                        </if>
+                                            <if test="name != null">
+                            name,
+                        </if>
+                                            <if test="age != null">
+                            age,
+                        </if>
+                                            <if test="gender != null">
+                            gender,
+                        </if>
+                                            <if test="coatColor != null">
+                            coat_color,
+                        </if>
+                                            <if test="resources != null">
+                            resources,
+                        </if>
+                                            <if test="petType != null">
+                            pet_type,
+                        </if>
+                                            <if test="price != null">
+                            price,
+                        </if>
+                                            <if test="address != null">
+                            address,
+                        </if>
+                                            <if test="userId != null">
+                            user_id,
+                        </if>
+                                            <if test="shopId != null">
+                            shop_id,
+                        </if>
+                                            <if test="note != null">
+                            note,
+                        </if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+                                            <if test="title != null">
+#{title}                            ,
+                        </if>
+                                            <if test="state != null">
+#{state}                            ,
+                        </if>
+                                            <if test="name != null">
+#{name}                            ,
+                        </if>
+                                            <if test="age != null">
+#{age}                            ,
+                        </if>
+                                            <if test="gender != null">
+#{gender}                            ,
+                        </if>
+                                            <if test="coatColor != null">
+#{coatColor}                            ,
+                        </if>
+                                            <if test="resources != null">
+#{resources}                            ,
+                        </if>
+                                            <if test="petType != null">
+#{petType}                            ,
+                        </if>
+                                            <if test="price != null">
+#{price}                            ,
+                        </if>
+                                            <if test="address != null">
+#{address}                            ,
+                        </if>
+                                            <if test="userId != null">
+#{userId}                            ,
+                        </if>
+                                            <if test="shopId != null">
+#{shopId}                            ,
+                        </if>
+                                            <if test="note != null">
+#{note}                            ,
+                        </if>
+        </trim>
+    </insert>
+    <!--删除对象-->
+    <delete id="delete" parameterType="long">
+        delete from t_search_master_msg where id = #{id}
+    </delete>
+
+    <!--更新对象-->
+    <update id="update" parameterType="SearchMasterMsg">
+        update t_search_master_msg
+        <set>
+                                            <if test="title != null">
+                            title = #{title},
+                        </if>
+                                            <if test="state != null">
+                            state = #{state},
+                        </if>
+                                            <if test="name != null">
+                            name = #{name},
+                        </if>
+                                            <if test="age != null">
+                            age = #{age},
+                        </if>
+                                            <if test="gender != null">
+                            gender = #{gender},
+                        </if>
+                                            <if test="coatColor != null">
+                            coat_color = #{coatColor},
+                        </if>
+                                            <if test="resources != null">
+                            resources = #{resources},
+                        </if>
+                                            <if test="petType != null">
+                            pet_type = #{petType},
+                        </if>
+                                            <if test="price != null">
+                            price = #{price},
+                        </if>
+                                            <if test="address != null">
+                            address = #{address},
+                        </if>
+                                            <if test="userId != null">
+                            user_id = #{userId},
+                        </if>
+                                            <if test="shopId != null">
+                            shop_id = #{shopId},
+                        </if>
+                                            <if test="note != null">
+                            note = #{note}                        </if>
+        </set>
+        where id = #{id}
+    </update>
+    <!--查找单个对象-->
+    <select id="selectOne" resultMap="BaseResultMap" parameterType="long">
+        select * from t_search_master_msg where id = #{id}
+    </select>
+    <!--查找所有对象-->
+    <select id="selectAll" resultMap="BaseResultMap">
+        select * from t_search_master_msg
+    </select>
+    <!--查询总数=参数（查询对象），返回值：long-->
+    <select id="queryByCount" parameterType="SearchMasterMsgQuery" resultType="integer">
+        select count(*) from t_search_master_msg
+        <include refid="whereSql"/>
+    </select>
+    <!--查询当前页数据=参数（查询对象），返回值:List-->
+    <select id="queryByPage" parameterType="SearchMasterMsgQuery" resultMap="BaseResultMap">
+        select * from t_search_master_msg
+        <include refid="whereSql"/>
+        limit #{begin},#{pageSize}
+    </select>
+
+
+    <sql id="whereSql">
+        <where>
+            <if test="keyword!=null and keyword!=''">
+                and (name like concat('%',#{keyword},'%'))
+            </if>
+        </where>
+    </sql>
+
+    <!--批量删除-->
+    <delete id="batchDel" parameterType="arraylist">
+        delete from t_search_master_msg where id in
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="eth.bruises.pet.domain.SearchMasterMsg">
+        <id column="id" property="id" />
+        <result column="title" property="title" />
+        <result column="state" property="state" />
+        <result column="name" property="name" />
+        <result column="age" property="age" />
+        <result column="gender" property="gender" />
+        <result column="coat_color" property="coatColor" />
+        <result column="resources" property="resources" />
+        <result column="pet_type" property="petType" />
+        <result column="price" property="price" />
+        <result column="address" property="address" />
+        <result column="user_id" property="userId" />
+        <result column="shop_id" property="shopId" />
+        <result column="note" property="note" />
+    </resultMap>
+
+</mapper>

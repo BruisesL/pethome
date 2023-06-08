@@ -33,4 +33,11 @@ public interface ShopMapper extends BaseMapper<Shop> {
      * @return
      */
     List<ShopStatisticsBo> getStateStatistics();
+
+    /**
+     * 通过状态查询店铺
+     * @param i
+     * @return
+     */
+    List<Shop> findByState(int i);
 }

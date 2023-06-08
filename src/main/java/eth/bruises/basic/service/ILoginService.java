@@ -15,7 +15,7 @@ public interface ILoginService {
      * @param loginDto
      * @return
      */
-    LoginVo login(LoginDto loginDto);
+    String login(LoginDto loginDto);
 
     /**
      * 安全退出的方法

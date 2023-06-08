@@ -126,6 +126,9 @@
     <select id="getStateStatistics" resultType="eth.bruises.org.bo.ShopStatisticsBo">
         select state, count(state) count from t_shop group by state
     </select>
+    <select id="findByState" resultType="eth.bruises.org.domain.Shop">
+        select * from t_shop where state = #{state}
+    </select>
 
 
     <sql id="whereSql">

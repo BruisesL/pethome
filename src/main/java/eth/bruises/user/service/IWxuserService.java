@@ -21,5 +21,5 @@ public interface IWxuserService extends BaseService<Wxuser> {
      * @param wxBindingDto
      * @return LoginVo
      */
-    LoginVo wxBinding(WxBindingDto wxBindingDto);
+    String wxBinding(WxBindingDto wxBindingDto);
 }

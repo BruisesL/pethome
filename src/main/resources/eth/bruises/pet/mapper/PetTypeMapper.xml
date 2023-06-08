@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="eth.bruises.pet.mapper.PetTypeMapper">
+    <!--保存对象-->
+    <insert id="add" parameterType="PetType" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into t_pet_type
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                                            <if test="name != null">
+                            name,
+                        </if>
+                                            <if test="description != null">
+                            description,
+                        </if>
+                                            <if test="parentId != null">
+                            parent_id,
+                        </if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+                                            <if test="name != null">
+#{name}                            ,
+                        </if>
+                                            <if test="description != null">
+#{description}                            ,
+                        </if>
+                                            <if test="parentId != null">
+#{parentId}                            ,
+                        </if>
+        </trim>
+    </insert>
+    <!--删除对象-->
+    <delete id="delete" parameterType="long">
+        delete from t_pet_type where id = #{id}
+    </delete>
+
+    <!--更新对象-->
+    <update id="update" parameterType="PetType">
+        update t_pet_type
+        <set>
+                                            <if test="name != null">
+                            name = #{name},
+                        </if>
+                                            <if test="description != null">
+                            description = #{description},
+                        </if>
+                                            <if test="parentId != null">
+                            parent_id = #{parentId}                        </if>
+        </set>
+        where id = #{id}
+    </update>
+    <!--查找单个对象-->
+    <select id="selectOne" resultMap="BaseResultMap" parameterType="long">
+        select * from t_pet_type where id = #{id}
+    </select>
+    <!--查找所有对象-->
+    <select id="selectAll" resultMap="BaseResultMap">
+        select * from t_pet_type
+    </select>
+    <!--查询总数=参数（查询对象），返回值：long-->
+    <select id="queryByCount" parameterType="PetTypeQuery" resultType="integer">
+        select count(*) from t_pet_type
+        <include refid="whereSql"/>
+    </select>
+    <!--查询当前页数据=参数（查询对象），返回值:List-->
+    <select id="queryByPage" parameterType="PetTypeQuery" resultMap="BaseResultMap">
+        select * from t_pet_type
+        <include refid="whereSql"/>
+        limit #{begin},#{pageSize}
+    </select>
+
+
+    <sql id="whereSql">
+        <where>
+            <if test="keyword!=null and keyword!=''">
+                and (name like concat('%',#{keyword},'%'))
+            </if>
+        </where>
+    </sql>
+
+    <!--批量删除-->
+    <delete id="batchDel" parameterType="arraylist">
+        delete from t_pet_type where id in
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="eth.bruises.pet.domain.PetType">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="description" property="description" />
+        <result column="parent_id" property="parentId" />
+    </resultMap>
+
+</mapper>

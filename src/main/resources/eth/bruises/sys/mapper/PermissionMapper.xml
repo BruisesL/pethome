@@ -81,6 +81,16 @@
         limit #{begin},#{pageSize}
     </select>
 
+    <select id="loadByLogininfoId" resultType="java.lang.String">
+        select tp.sn
+        from t_permission tp
+                 left join t_role_permission trp on tp.id = trp.permission_id
+                 left join t_role tr on trp.role_id = tr.id
+                 left join t_employee_role ter on tr.id = ter.role_id
+                 left join t_employee te on ter.employee_id = te.id
+        where te.logininfo_id = #{logininfoId}
+    </select>
+
 
     <sql id="whereSql">
         <where>

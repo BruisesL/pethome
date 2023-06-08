@@ -10,7 +10,11 @@ import eth.bruises.basic.bo.WxLoginBo;
 import eth.bruises.basic.constants.WxConstants;
 import eth.bruises.basic.exception.GlobalException;
 import eth.bruises.basic.exception.GlobalExceptionEnum;
+import eth.bruises.basic.utils.JwtUtil;
 import eth.bruises.basic.vo.LoginVo;
+import eth.bruises.sys.domain.Menu;
+import eth.bruises.sys.mapper.MenuMapper;
+import eth.bruises.sys.mapper.PermissionMapper;
 import eth.bruises.user.domain.Logininfo;
 import eth.bruises.user.domain.User;
 import eth.bruises.user.domain.Wxuser;
@@ -20,11 +24,13 @@ import eth.bruises.user.mapper.UserMapper;
 import eth.bruises.user.mapper.WxuserMapper;
 import eth.bruises.user.service.IWxuserService;
 import eth.bruises.basic.service.impl.BaseServiceImpl;
+import eth.bruises.user.vo.PayloadVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -45,11 +51,18 @@ public class WxuserServiceImpl extends BaseServiceImpl<Wxuser> implements IWxuse
     @Autowired
     private LogininfoMapper logininfoMapper;
 
+    @Autowired
+    private MenuMapper menuMapper;
+
+    @Autowired
+    private PermissionMapper permissionMapper;
+
+
     public static String WXPHONE_CODE_KEY = "wx_register:%s";
 
 
     @Override
-    public LoginVo wxBinding(WxBindingDto wxBindingDto) {
+    public String wxBinding(WxBindingDto wxBindingDto) {
         String code = wxBindingDto.getCode();
         String phone = wxBindingDto.getPhone();
         String phoneCode = wxBindingDto.getPhoneCode();
@@ -113,14 +126,31 @@ public class WxuserServiceImpl extends BaseServiceImpl<Wxuser> implements IWxuse
         }
         // 免密登录
         // 走登录逻辑
-        // 生成UUID->Token
-        UUID uuid = UUID.randomUUID();
-        // Kye是UUID，Value是用户信息存入到Redis中设置30分钟有效期
-        redisTemplate.opsForValue().set(uuid.toString(), logininfo, 30, TimeUnit.MINUTES);
-        // 将token和用户信息放入到vo中并响应
+//        // 生成UUID->Token
+//        UUID uuid = UUID.randomUUID();
+//        // Kye是UUID，Value是用户信息存入到Redis中设置30分钟有效期
+//        redisTemplate.opsForValue().set(uuid.toString(), logininfo, 30, TimeUnit.MINUTES);
+//        // 将token和用户信息放入到vo中并响应
+//        logininfo.setPassword("");
+//        logininfo.setSalt("");
+//        return new LoginVo(uuid.toString(), logininfo);
+        // 将logininfo的敏感信息置空
         logininfo.setPassword("");
         logininfo.setSalt("");
-        return new LoginVo(uuid.toString(), logininfo);
+        // 准备JWT的载荷数据-用户信息
+        PayloadVo payloadVo = new PayloadVo();
+        payloadVo.setLogininfo(logininfo);
+        Long logininfoId = logininfo.getId();
+        if (logininfo.getType() == 0){
+            // 准备JWT的载荷数据-用户权限信息
+            List<String> permissions = permissionMapper.loadByLogininfoId(logininfoId);
+            payloadVo.setPermissions(permissions);
+
+            // 准备JWT的载荷数据-用户菜单信息
+            List<Menu> menus = menuMapper.loadByLogininfoId(logininfoId);
+            payloadVo.setMenus(menus);
+        }
+        return JwtUtil.createToken(payloadVo);
     }
 
     private Long saveUserAndLogininfo(String phone, Logininfo logininfo) {

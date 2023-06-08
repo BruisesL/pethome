@@ -3,6 +3,8 @@ package eth.bruises.sys.mapper;
 import eth.bruises.sys.domain.Permission;
 import eth.bruises.basic.mapper.BaseMapper;
 
+import java.util.List;
+
 /**
  * <p>
  *  Mapper 接口
@@ -14,4 +16,6 @@ import eth.bruises.basic.mapper.BaseMapper;
 public interface PermissionMapper extends BaseMapper<Permission> {
 
     Permission loadBySn(String permissionSn);
+
+    List<String> loadByLogininfoId(Long logininfoId);
 }

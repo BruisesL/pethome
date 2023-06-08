@@ -54,8 +54,10 @@
     </select>
 
     <select id="queryByPage" resultMap="pageResultMap">
-        select te.*
+        select te.*,d.id dId,d.name dName,s.id sId,s.name sName
         from t_Employee te
+        left join t_department d on te.department_id = d.id
+        left join t_shop s on te.shop_id = s.id
         <include refid="searchByCondition"></include>
         order by te.id
         limit #{begin},#{pageSize}
@@ -78,6 +80,14 @@
         <result column="department_id" property="departmentId"></result>
         <result column="logininfo_id" property="logininfoId"></result>
         <result column="shop_id" property="shopId"></result>
+        <association property="department" javaType="department">
+            <id column="dId" property="id"></id>
+            <result column="dName" property="name"></result>
+        </association>
+        <association property="shop" javaType="shop">
+            <id column="sId" property="id"></id>
+            <result column="sName" property="name"></result>
+        </association>
     </resultMap>
     
     <sql id="searchByCondition">

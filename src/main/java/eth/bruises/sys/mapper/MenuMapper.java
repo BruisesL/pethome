@@ -3,6 +3,8 @@ package eth.bruises.sys.mapper;
 import eth.bruises.sys.domain.Menu;
 import eth.bruises.basic.mapper.BaseMapper;
 
+import java.util.List;
+
 /**
  * <p>
  *  Mapper 接口
@@ -13,4 +15,5 @@ import eth.bruises.basic.mapper.BaseMapper;
  */
 public interface MenuMapper extends BaseMapper<Menu> {
 
+    List<Menu> loadByLogininfoId(Long logininfoId);
 }

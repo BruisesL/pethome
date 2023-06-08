@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="eth.bruises.pet.mapper.PetDetailMapper">
+    <!--保存对象-->
+    <insert id="add" parameterType="PetDetail" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into t_pet_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                                            <if test="petId != null">
+                            pet_id,
+                        </if>
+                                            <if test="adoptNotice != null">
+                            adoptNotice,
+                        </if>
+                                            <if test="intro != null">
+                            intro,
+                        </if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+                                            <if test="petId != null">
+#{petId}                            ,
+                        </if>
+                                            <if test="adoptNotice != null">
+#{adoptNotice}                            ,
+                        </if>
+                                            <if test="intro != null">
+#{intro}                            ,
+                        </if>
+        </trim>
+    </insert>
+    <!--删除对象-->
+    <delete id="delete" parameterType="long">
+        delete from t_pet_detail where id = #{id}
+    </delete>
+
+    <!--更新对象-->
+    <update id="update" parameterType="PetDetail">
+        update t_pet_detail
+        <set>
+                                            <if test="petId != null">
+                            pet_id = #{petId},
+                        </if>
+                                            <if test="adoptNotice != null">
+                            adoptNotice = #{adoptNotice},
+                        </if>
+                                            <if test="intro != null">
+                            intro = #{intro}                        </if>
+        </set>
+        where id = #{id}
+    </update>
+    <!--查找单个对象-->
+    <select id="selectOne" resultMap="BaseResultMap" parameterType="long">
+        select * from t_pet_detail where id = #{id}
+    </select>
+    <!--查找所有对象-->
+    <select id="selectAll" resultMap="BaseResultMap">
+        select * from t_pet_detail
+    </select>
+    <!--查询总数=参数（查询对象），返回值：long-->
+    <select id="queryByCount" parameterType="PetDetailQuery" resultType="integer">
+        select count(*) from t_pet_detail
+        <include refid="whereSql"/>
+    </select>
+    <!--查询当前页数据=参数（查询对象），返回值:List-->
+    <select id="queryByPage" parameterType="PetDetailQuery" resultMap="BaseResultMap">
+        select * from t_pet_detail
+        <include refid="whereSql"/>
+        limit #{begin},#{pageSize}
+    </select>
+
+
+    <sql id="whereSql">
+        <where>
+            <if test="keyword!=null and keyword!=''">
+                and (name like concat('%',#{keyword},'%'))
+            </if>
+        </where>
+    </sql>
+
+    <!--批量删除-->
+    <delete id="batchDel" parameterType="arraylist">
+        delete from t_pet_detail where id in
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="eth.bruises.pet.domain.PetDetail">
+        <id column="id" property="id" />
+        <result column="pet_id" property="petId" />
+        <result column="adoptNotice" property="adoptNotice" />
+        <result column="intro" property="intro" />
+    </resultMap>
+
+</mapper>

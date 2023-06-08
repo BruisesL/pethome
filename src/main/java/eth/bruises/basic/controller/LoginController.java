@@ -17,13 +17,16 @@ import javax.validation.Valid;
  */
 @RestController
 public class LoginController {
-    @Autowired
-    private ILoginService loginService;
+//    @Autowired
+//    private ILoginService loginService;
+private final ILoginService loginService;
 
+    public LoginController (ILoginService loginService) {
+        this.loginService = loginService;
+    }
     @PostMapping("/login")
     public AjaxResult login(@Valid @RequestBody LoginDto loginDto) {
-        LoginVo loginVo = loginService.login(loginDto);
-        return AjaxResult.success(loginVo);
+        return AjaxResult.success(loginService.login(loginDto));
     }
 
     @GetMapping("/logout/{token}")

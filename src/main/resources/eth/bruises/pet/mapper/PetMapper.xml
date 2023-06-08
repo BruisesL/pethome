@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="eth.bruises.pet.mapper.PetMapper">
+    <!--保存对象-->
+    <insert id="add" parameterType="Pet" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into t_pet
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                                            <if test="name != null">
+                            name,
+                        </if>
+                                            <if test="costprice != null">
+                            costprice,
+                        </if>
+                                            <if test="saleprice != null">
+                            saleprice,
+                        </if>
+                                            <if test="typeId != null">
+                            type_id,
+                        </if>
+                                            <if test="resources != null">
+                            resources,
+                        </if>
+                                            <if test="state != null">
+                            state,
+                        </if>
+                                            <if test="offsaletime != null">
+                            offsaletime,
+                        </if>
+                                            <if test="onsaletime != null">
+                            onsaletime,
+                        </if>
+                                            <if test="createtime != null">
+                            createtime,
+                        </if>
+                                            <if test="shopId != null">
+                            shop_id,
+                        </if>
+                                            <if test="userId != null">
+                            user_id,
+                        </if>
+                                            <if test="searchMasterMsgId != null">
+                            search_master_msg_id,
+                        </if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+                                            <if test="name != null">
+#{name}                            ,
+                        </if>
+                                            <if test="costprice != null">
+#{costprice}                            ,
+                        </if>
+                                            <if test="saleprice != null">
+#{saleprice}                            ,
+                        </if>
+                                            <if test="typeId != null">
+#{typeId}                            ,
+                        </if>
+                                            <if test="resources != null">
+#{resources}                            ,
+                        </if>
+                                            <if test="state != null">
+#{state}                            ,
+                        </if>
+                                            <if test="offsaletime != null">
+#{offsaletime}                            ,
+                        </if>
+                                            <if test="onsaletime != null">
+#{onsaletime}                            ,
+                        </if>
+                                            <if test="createtime != null">
+#{createtime}                            ,
+                        </if>
+                                            <if test="shopId != null">
+#{shopId}                            ,
+                        </if>
+                                            <if test="userId != null">
+#{userId}                            ,
+                        </if>
+                                            <if test="searchMasterMsgId != null">
+#{searchMasterMsgId}                            ,
+                        </if>
+        </trim>
+    </insert>
+    <!--删除对象-->
+    <delete id="delete" parameterType="long">
+        delete from t_pet where id = #{id}
+    </delete>
+
+    <!--更新对象-->
+    <update id="update" parameterType="Pet">
+        update t_pet
+        <set>
+                                            <if test="name != null">
+                            name = #{name},
+                        </if>
+                                            <if test="costprice != null">
+                            costprice = #{costprice},
+                        </if>
+                                            <if test="saleprice != null">
+                            saleprice = #{saleprice},
+                        </if>
+                                            <if test="typeId != null">
+                            type_id = #{typeId},
+                        </if>
+                                            <if test="resources != null">
+                            resources = #{resources},
+                        </if>
+                                            <if test="state != null">
+                            state = #{state},
+                        </if>
+                                            <if test="offsaletime != null">
+                            offsaletime = #{offsaletime},
+                        </if>
+                                            <if test="onsaletime != null">
+                            onsaletime = #{onsaletime},
+                        </if>
+                                            <if test="createtime != null">
+                            createtime = #{createtime},
+                        </if>
+                                            <if test="shopId != null">
+                            shop_id = #{shopId},
+                        </if>
+                                            <if test="userId != null">
+                            user_id = #{userId},
+                        </if>
+                                            <if test="searchMasterMsgId != null">
+                            search_master_msg_id = #{searchMasterMsgId}                        </if>
+        </set>
+        where id = #{id}
+    </update>
+    <!--查找单个对象-->
+    <select id="selectOne" resultMap="BaseResultMap" parameterType="long">
+        select * from t_pet where id = #{id}
+    </select>
+    <!--查找所有对象-->
+    <select id="selectAll" resultMap="BaseResultMap">
+        select * from t_pet
+    </select>
+    <!--查询总数=参数（查询对象），返回值：long-->
+    <select id="queryByCount" parameterType="PetQuery" resultType="integer">
+        select count(*) from t_pet
+        <include refid="whereSql"/>
+    </select>
+    <!--查询当前页数据=参数（查询对象），返回值:List-->
+    <select id="queryByPage" parameterType="PetQuery" resultMap="BaseResultMap">
+        select * from t_pet
+        <include refid="whereSql"/>
+        limit #{begin},#{pageSize}
+    </select>
+
+
+    <sql id="whereSql">
+        <where>
+            <if test="keyword!=null and keyword!=''">
+                and (name like concat('%',#{keyword},'%'))
+            </if>
+        </where>
+    </sql>
+
+    <!--批量删除-->
+    <delete id="batchDel" parameterType="arraylist">
+        delete from t_pet where id in
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="eth.bruises.pet.domain.Pet">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="costprice" property="costprice" />
+        <result column="saleprice" property="saleprice" />
+        <result column="type_id" property="typeId" />
+        <result column="resources" property="resources" />
+        <result column="state" property="state" />
+        <result column="offsaletime" property="offsaletime" />
+        <result column="onsaletime" property="onsaletime" />
+        <result column="createtime" property="createtime" />
+        <result column="shop_id" property="shopId" />
+        <result column="user_id" property="userId" />
+        <result column="search_master_msg_id" property="searchMasterMsgId" />
+    </resultMap>
+
+</mapper>

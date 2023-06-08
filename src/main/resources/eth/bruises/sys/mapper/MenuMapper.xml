@@ -107,10 +107,32 @@
     </select>
     <!--查询当前页数据=参数（查询对象），返回值:List-->
     <select id="queryByPage" parameterType="MenuQuery" resultMap="BaseResultMap">
-        select m.*, e.id eId, e.name eName from t_menu m join t_menu e on m.parent_id = e.id
+        select m.*, e.id eId, e.name eName from t_menu m left join t_menu e on m.parent_id = e.id
         <include refid="whereSql"/>
         limit #{begin},#{pageSize}
     </select>
+
+    <select id="loadByLogininfoId" resultMap="loadByLogininfoIdResultMap">
+        select parent.id pId, parent.name pName, parent.icon pIcon, tm.*
+        from t_employee te
+                 join t_employee_role ter on te.id = ter.employee_id
+                 join t_role_menu trm on ter.role_id = trm.role_id
+                 join t_menu tm on trm.menu_id = tm.id
+                 join t_menu parent on parent.id = tm.parent_id
+        where te.logininfo_id = #{logininfoId}
+    </select>
+
+    <resultMap id="loadByLogininfoIdResultMap" type="Menu">
+        <id property="id" column="pId"></id>
+        <result property="name" column="pName"></result>
+        <result property="icon" column="pIcon"></result>
+        <collection property="children" ofType="menu">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+            <result column="component" property="component"/>
+            <result column="url" property="url"/>
+        </collection>
+    </resultMap>
 
 
     <sql id="whereSql">

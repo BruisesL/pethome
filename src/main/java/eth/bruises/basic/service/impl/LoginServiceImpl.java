@@ -12,19 +12,25 @@ import eth.bruises.basic.exception.GlobalException;
 import eth.bruises.basic.exception.GlobalExceptionEnum;
 import eth.bruises.basic.service.ILoginService;
 import eth.bruises.basic.utils.AjaxResult;
+import eth.bruises.basic.utils.JwtUtil;
 import eth.bruises.basic.vo.LoginVo;
+import eth.bruises.sys.domain.Menu;
+import eth.bruises.sys.mapper.MenuMapper;
+import eth.bruises.sys.mapper.PermissionMapper;
 import eth.bruises.user.domain.Logininfo;
 import eth.bruises.user.domain.User;
 import eth.bruises.user.domain.Wxuser;
 import eth.bruises.user.mapper.LogininfoMapper;
 import eth.bruises.user.mapper.UserMapper;
 import eth.bruises.user.mapper.WxuserMapper;
+import eth.bruises.user.vo.PayloadVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -48,9 +54,15 @@ public class LoginServiceImpl implements ILoginService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private MenuMapper menuMapper;
+
+    @Autowired
+    private PermissionMapper permissionMapper;
+
 
     @Override
-    public LoginVo login(LoginDto loginDto) {
+    public String login(LoginDto loginDto) {
         // 校验是否存在用户，不存在报错
         Logininfo logininfo = logininfoMapper.findByAccount(loginDto);
         if (null == logininfo) {
@@ -65,7 +77,7 @@ public class LoginServiceImpl implements ILoginService {
         if (!verifyPassword.equals(logininfo.getPassword())) {
             throw new GlobalException(GlobalExceptionEnum.INCORRECT_USERNAME_OR_PASSWORD);
         }
-        return loginReturnLoginVo(logininfo);
+        return loginReturnToken(logininfo);
     }
 
     /**
@@ -73,15 +85,36 @@ public class LoginServiceImpl implements ILoginService {
      * @param logininfo
      * @return
      */
-    private LoginVo loginReturnLoginVo(Logininfo logininfo) {
-        // 生成UUID
-        String uuid = UUID.randomUUID().toString();
-        // 存redis key:uuid value:Logininfo对象
-        redisTemplate.opsForValue().set(uuid, logininfo, 30, TimeUnit.MINUTES);
-        // 生成vo，返回前端
-        logininfo.setSalt("");
+    private String loginReturnToken(Logininfo logininfo) {
+// 原有方案，已取缔，原方案未传输权限相关信息
+        //        // 生成UUID
+//        String uuid = UUID.randomUUID().toString();
+//        // 存redis key:uuid value:Logininfo对象
+//        redisTemplate.opsForValue().set(uuid, logininfo, 30, TimeUnit.MINUTES);
+//        // 生成vo，返回前端
+//        logininfo.setSalt("");
+//        logininfo.setPassword("");
+//        return new LoginVo(uuid, logininfo);
+        // JWT方案，返回token
+        // 将logininfo的敏感信息置空
         logininfo.setPassword("");
-        return new LoginVo(uuid, logininfo);
+        logininfo.setSalt("");
+        // 准备JWT的载荷数据-用户信息
+        PayloadVo payloadVo = new PayloadVo();
+        payloadVo.setLogininfo(logininfo);
+        Long logininfoId = logininfo.getId();
+        if (logininfo.getType() == 0){
+            // 准备JWT的载荷数据-用户权限信息
+            List<String> permissions = permissionMapper.loadByLogininfoId(logininfoId);
+            payloadVo.setPermissions(permissions);
+
+            // 准备JWT的载荷数据-用户菜单信息
+            List<Menu> menus = menuMapper.loadByLogininfoId(logininfoId);
+            payloadVo.setMenus(menus);
+        }
+
+        String token = JwtUtil.createToken(payloadVo);
+        return token;
     }
 
     @Override
@@ -127,8 +160,7 @@ public class LoginServiceImpl implements ILoginService {
                     userMapper.update(user);
                 }
                 // 不为空则直接登陆
-                LoginVo loginVo = loginReturnLoginVo(logininfo);
-                return AjaxResult.success(loginVo);
+                return AjaxResult.success(loginReturnToken(logininfo));
             }
         }
         // 以上条件均不满足 则说明未绑定,需要跳转绑定页面，给前端返回goBinding
